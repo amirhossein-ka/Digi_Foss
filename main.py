@@ -1,4 +1,5 @@
 import os
+import threading
 
 from apscheduler.schedulers.asyncio import AsyncIOScheduler
 from pyrogram import Client, filters
@@ -67,6 +68,5 @@ scheduler.add_job(job, "interval", seconds=300)
 scheduler.start()
 # خط های بالا برای روشن نگه داشتن ربات روی هروکو هست، اگه شما از هروکو استفده نمیکنید  میتونید کامنت کنید
 # یا اگه استفاده میکنید یه گروه بسازید و تو قسمت ارسال پیامش چت ایدی اون گروه رو قرار بدید
-web.run_app(myapp)
 app.run()
-
+threading.Thread(target=lambda: web.run_app(myapp)).start()
