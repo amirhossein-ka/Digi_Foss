@@ -1,12 +1,12 @@
+import os
+
+from apscheduler.schedulers.asyncio import AsyncIOScheduler
 from pyrogram import Client, filters
 from pyrogram.types import InlineKeyboardMarkup, InlineKeyboardButton
 from pyrogram.types import Message
-from apscheduler.schedulers.asyncio import AsyncIOScheduler
 
+from aiohttp_srv import myapp, web
 from plugins.querys import get_admins
-import asyncio
-from time import sleep
-import os
 
 api_id = os.environ['api_id']
 api_hash = os.environ['api_hash']
@@ -67,6 +67,6 @@ scheduler.add_job(job, "interval", seconds=300)
 scheduler.start()
 # خط های بالا برای روشن نگه داشتن ربات روی هروکو هست، اگه شما از هروکو استفده نمیکنید  میتونید کامنت کنید
 # یا اگه استفاده میکنید یه گروه بسازید و تو قسمت ارسال پیامش چت ایدی اون گروه رو قرار بدید
+web.run_app(myapp)
 app.run()
 
-app.run()

@@ -1,14 +1,13 @@
 import re
 import sqlite3
 from time import time as utime
-from time import sleep
 
 from pyrogram import Client, filters
 from pyrogram.errors import exceptions, MessageDeleteForbidden
 from pyrogram.types import InlineKeyboardButton, InlineKeyboardMarkup, Message, ChatPermissions, ChatMemberUpdated
 
-from plugins.querys import get_admins, get_setting
 from plugins.create_db import create_setting, create_user
+from plugins.querys import get_admins, get_setting
 
 
 def m2s(minutes):
@@ -17,6 +16,7 @@ def m2s(minutes):
 
 def h2s(hour):
     return hour * 3600
+
 
 async def update(c: Client, m: Message):
     chat_id = str(m.chat.id).strip('-')
@@ -39,7 +39,7 @@ async def update(c: Client, m: Message):
                 is_admin = True
                 status = data[i].status
             elif data[i].user.is_bot == 1 or data[
-                    i].status != "creator" or data[i].status != "administrator":
+                i].status != "creator" or data[i].status != "administrator":
                 is_admin = False
                 status = data[i].status
             warns = 0
@@ -84,9 +84,9 @@ async def welcome(c: Client, m: Message):
     if m.new_chat_members[0]["id"] == 1716969867:
         ids = str(m.chat.id)
         ids = ids.strip('-')
-        create_user(ids)    # create tables 
-        create_setting(ids) 
-        await update(c,m) # add users into database
+        create_user(ids)  # create tables
+        create_setting(ids)
+        await update(c, m)  # add users into database
         await m.reply_text("من اووومدم !!!\n منو ادمین کن تا بتونی از همه قابلیت هام استفاده کنی")
     else:
         await c.restrict_chat_member(m.chat.id, m.from_user.id,
@@ -96,7 +96,7 @@ async def welcome(c: Client, m: Message):
         con = sqlite3.connect("databases/" + dbname)  # وصل شدن به دیتا بیس
         cur = con.cursor()
         cur.execute("SELECT num_id FROM USERS WHERE num_id = (?)",
-                    (m.from_user.id, ))
+                    (m.from_user.id,))
         users = cur.fetchone()
         print(users)
         if users is None:
@@ -162,7 +162,7 @@ async def add_warn(c: Client, m: Message):
             con = sqlite3.connect("databases/" + dbname)  # وصل شدن به دیتا بیس
             cur = con.cursor()
             cur.execute("SELECT warn FROM USERS where num_id = (?)",
-                        (num_id, ))
+                        (num_id,))
             warns = cur.fetchone()
             if get_admins(
                     str(m.chat.id).strip("-"), m.reply_to_message.from_user.id
@@ -209,7 +209,7 @@ async def del_warn(c, m: Message):
             con = sqlite3.connect("databases/" + dbname)  # وصل شدن به دیتا بیس
             cur = con.cursor()
             cur.execute("SELECT warn FROM USERS where num_id = (?)",
-                        (num_id, ))  # get warns
+                        (num_id,))  # get warns
             warns = cur.fetchone()
 
             if warns[0] == 0:
@@ -359,12 +359,12 @@ async def un_ban(c: Client, m: Message):
         con = sqlite3.connect('databases/' + dbname)
         cur = con.cursor()
         cur.execute("SELECT num_id FROM USERS WHERE username = (?)",
-                    (username, ))
+                    (username,))
         result = cur.fetchone()
         if result is not None:
             cur.execute(
                 "UPDATE USERS SET 'status' = 'member' WHERE num_id =(?)",
-                (result[0], ))
+                (result[0],))
             await c.unban_chat_member(chat_id, result[0])
             con.commit()
             await m.reply_text(f"@{username} حالا دوباره میتونه عضو گروه بشه 😒"
@@ -456,11 +456,11 @@ async def button(c: Client,
                         url=url_ddg,
                     )
                 ],
-                 [
-                     InlineKeyboardButton(
-                         'نمیخوام، اینو ببر',
-                         callback_data=f"cls_pnl,{m.from_user.id},{m.chat.id}")
-                 ]]))
+                    [
+                        InlineKeyboardButton(
+                            'نمیخوام، اینو ببر',
+                            callback_data=f"cls_pnl,{m.from_user.id},{m.chat.id}")
+                    ]]))
     else:
         pass
 
@@ -550,8 +550,8 @@ async def updated_user(c: Client, m: ChatMemberUpdated):
                 "UPDATE USERS SET is_admin=(?),status=(?) WHERE num_id=(?)",
                 (True, "administrator", user_id))
         elif m.new_chat_member.status == "administrator" and m.new_chat_member.user.id == 1716969867:
-            await c.send_message(m.chat.id, "خوووبه حالا که ادمینم کردی همه اعضای گروهتو  ریموو میکنم 😈")
-            awiat m.
+            await c.send_message(m.chat.id, "خوبه حالا که ادمینم کردی همه اعضای گروهتو  ریموو میکنم 😈")
+
     except AttributeError:
         pass
 
