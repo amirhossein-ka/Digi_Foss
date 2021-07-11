@@ -1,5 +1,8 @@
+import asyncio
 import os
+import threading
 
+from aiohttp import web
 from apscheduler.schedulers.asyncio import AsyncIOScheduler
 from pyrogram import Client, filters
 from pyrogram.types import InlineKeyboardMarkup, InlineKeyboardButton
@@ -64,6 +67,32 @@ scheduler = AsyncIOScheduler()
 scheduler.add_job(job, "interval", seconds=300)
 
 scheduler.start()
+
+
 # خط های بالا برای روشن نگه داشتن ربات روی هروکو هست، اگه شما از هروکو استفده نمیکنید  میتونید کامنت کنید
 # یا اگه استفاده میکنید یه گروه بسازید و تو قسمت ارسال پیامش چت ایدی اون گروه رو قرار بدید
+
+
+def aiohttp_server():
+    async def say_hello(request):
+        return web.Response(text='Hello, world')
+
+    myapp = web.Application()
+    myapp.add_routes([web.get('/', say_hello)])
+    runner = web.AppRunner(myapp)
+    return runner
+
+
+def run_server(runner):
+    loop = asyncio.new_event_loop()
+    asyncio.set_event_loop(loop)
+    loop.run_until_complete(runner.setup())
+    site = web.TCPSite(runner, '0.0.0.0', 8080)
+    loop.run_until_complete(site.start())
+    loop.run_forever()
+
+
+t = threading.Thread(target=run_server, args=(aiohttp_server(),))
+t.start()
+
 app.run()

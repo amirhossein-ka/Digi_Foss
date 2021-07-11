@@ -165,9 +165,10 @@ async def add_warn(c: Client, m: Message):
                         (num_id,))
             warns = cur.fetchone()
             if get_admins(
-                    str(m.chat.id).strip("-"), m.reply_to_message.from_user.id
-            ):  # check if replied user is admin
+                    str(m.chat.id).strip("-"), m.reply_to_message.from_user.id):  # check if replied user is admin
                 await m.reply_text("من نمیتونم به ادمین های گروه اخطار بدم 😶")
+            elif m.reply_to_message.from_user.id == 1716969867:
+                await m.reply_text("واقعا چرا باید به خودم اخطار بدم /:")
             elif warns[0] + 1 < 10:
                 await m.reply_text(f"""
 اخطار!
@@ -194,7 +195,26 @@ async def add_warn(c: Client, m: Message):
         else:
             await m.reply_text("رو پیامی ریپلای نکردی !")
     else:
-        await m.reply_text("نکن بچه 😑😼")
+        con = sqlite3.connect('databases/' + dbname)
+        cur = con.cursor()
+        cur.execute("SELECT warn FROM USERS where num_id=(?)", (m.from_user.id,))
+        warns = cur.fetchone()
+        if warns[0] + 1 == 10:
+            await m.reply_text(f"""
+    حالا که به خودت اخطار دادم میفهمی
+    تو تا الان {warns[0]} اخطار داشتی ، یه اخطار دیگ بهت میدم که دیگ از این کارا نکنی
+    الان {warns[0] + 1} اخطار داری
+            """)
+            cur.execute("UPDATE USERS SET warn=(?) WHERE num_id=(?)", (warns[0] + 1, m.from_user.id))
+            con.commit()
+            con.close()
+        else:
+            await m.reply_text(
+                "به خاطر این کار های ناپسندت یک اخطار میگیری\nتا الان ۹ تا اخطار داشتی، پس الان باید بن بشی، خداحافظ.")
+            await c.kick_chat_member(m.chat.id, m.from_user.id)
+            cur.execute(
+                "UPDATE USERS SET status =(?) and warn =(?) WHERE num_id =(?)",
+                ('banned', 0, m.from_user.id))
 
 
 @Client.on_message(
