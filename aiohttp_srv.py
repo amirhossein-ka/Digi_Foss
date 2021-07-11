@@ -8,3 +8,4 @@ async def hello(request):
 myapp = web.Application()
 myapp.add_routes([web.get('/', hello)])
 
+web.run_app(myapp)

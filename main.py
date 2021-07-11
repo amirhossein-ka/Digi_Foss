@@ -1,12 +1,10 @@
 import os
-import threading
 
 from apscheduler.schedulers.asyncio import AsyncIOScheduler
 from pyrogram import Client, filters
 from pyrogram.types import InlineKeyboardMarkup, InlineKeyboardButton
 from pyrogram.types import Message
 
-from aiohttp_srv import myapp, web
 from plugins.querys import get_admins
 
 api_id = os.environ['api_id']
@@ -69,4 +67,3 @@ scheduler.start()
 # خط های بالا برای روشن نگه داشتن ربات روی هروکو هست، اگه شما از هروکو استفده نمیکنید  میتونید کامنت کنید
 # یا اگه استفاده میکنید یه گروه بسازید و تو قسمت ارسال پیامش چت ایدی اون گروه رو قرار بدید
 app.run()
-threading.Thread(target=lambda: web.run_app(myapp)).start()
