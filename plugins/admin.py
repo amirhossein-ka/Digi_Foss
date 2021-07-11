@@ -371,13 +371,13 @@ async def ban(c: Client, m: Message):
 @Client.on_message(
     filters.command("unban") | filters.regex(r"^ا+ن+ب+ن$") & filters.group)
 async def un_ban(c: Client, m: Message):
+    # print(username)
+    dbname = str(m.chat.id).strip('-') + '.db'
+    chat_id = m.chat.id
+    con = sqlite3.connect('databases/' + dbname)
+    cur = con.cursor()
     if m.reply_to_message is None:
         username = m.command[1].strip('@')
-        # print(username)
-        dbname = str(m.chat.id).strip('-') + '.db'
-        chat_id = m.chat.id
-        con = sqlite3.connect('databases/' + dbname)
-        cur = con.cursor()
         cur.execute("SELECT num_id FROM USERS WHERE username = (?)",
                     (username,))
         result = cur.fetchone()
@@ -395,6 +395,12 @@ async def un_ban(c: Client, m: Message):
                 "همچین کاربری توی گروه نبوده و یا ایدی خودش رو عوض کرده"
                 "\nشما میتونید به صورت دستی از تنظیمات گروه کاربر را از بن در بیارید"
             )
+    else:
+        await c.unban_chat_member(chat_id, m.reply_to_message.from_user.id)
+        await m.reply_to_message.reply_text(f"""
+{m.reply_to_message.from_user.mention}
+حالا میتونه عضو گروه بشه
+        """)
 
 
 # -- حذف پیام --
