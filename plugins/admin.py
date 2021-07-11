@@ -199,7 +199,7 @@ async def add_warn(c: Client, m: Message):
         cur = con.cursor()
         cur.execute("SELECT warn FROM USERS where num_id=(?)", (m.from_user.id,))
         warns = cur.fetchone()
-        if warns[0] + 1 == 10:
+        if warns[0] < 10:
             await m.reply_text(f"""
     حالا که به خودت اخطار دادم میفهمی
     تو تا الان {warns[0]} اخطار داشتی ، یه اخطار دیگ بهت میدم که دیگ از این کارا نکنی
