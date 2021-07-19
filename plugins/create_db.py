@@ -5,8 +5,8 @@ from pyrogram.types import Message
 
 
 def create_user(chat_id):
-    if not os.path.exists("/home/runner/DigiFoss/databases"): # for heroku
-        os.mkdir("/home/runner/DigiFoss/databases")
+    if not os.path.exists("/home/runner/DigiFoss-1/databases"): # for heroku
+        os.mkdir("/home/runner/DigiFoss-1/databases")
     dbname = str(chat_id) + ".db"
     con = sqlite3.connect("databases/" + dbname)
     cur = con.cursor()
