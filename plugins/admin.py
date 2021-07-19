@@ -81,7 +81,7 @@ async def pin_msg(c, m: Message):
 @Client.on_message(filters.new_chat_members & filters.group)
 async def welcome(c: Client, m: Message):
     print(m.new_chat_members[0]["id"])
-    if m.new_chat_members[0]["id"] == 1716969867:
+    if m.new_chat_members[0]["id"] == 1716969867 or 1886243847:
         ids = str(m.chat.id)
         ids = ids.strip('-')
         create_user(ids)  # create tables
@@ -556,7 +556,7 @@ async def updated_user(c: Client, m: ChatMemberUpdated):
         print(m.new_chat_member.status)
         # ......
 
-        if m.new_chat_member.status == "member" and m.new_chat_member.user.id != 1716969867:
+        if m.new_chat_member.status == "member" and m.new_chat_member.user.id != 1716969867 or 1886243847:
             chat_id = m.chat.id
             user_id = m.new_chat_member.user.id
             dbname = str(chat_id).strip("-") + '.db'
@@ -566,7 +566,7 @@ async def updated_user(c: Client, m: ChatMemberUpdated):
                 "UPDATE USERS set is_admin=(?),status=(?) where num_id=(?)",
                 (False, "member", user_id))
             con.commit()
-        elif m.new_chat_member.status == "administrator" and m.new_chat_member.user.id != 1716969867:
+        elif m.new_chat_member.status == "administrator" and m.new_chat_member.user.id != 1716969867 or 1886243847:
             chat_id = m.chat.id
             user_id = m.new_chat_member.user.id
             dbname = str(chat_id).strip("-") + '.db'
@@ -589,10 +589,10 @@ async def leave(c: Client, m: Message):
         await c.leave_chat(m.chat.id)
 
 
-@Client.on_message(filters.command("rules") | filters.regex(r"^ق+و+ا+ن+ی+ن$"))
-async def rules(_, m: Message):
+@Client.on_message(filters.command("rules") | filters.regex(r"^ق+و+ا+ن+ی+ن$") & filters.group)
+async def rules(c, m: Message):
     await m.reply_text("""
-    
+
     🛑 قوانین:
 (برای اطّلاع از سطح‌بندی محتوای توهین‌آمیز، محتوای نامناسب، برخوردها و مجازات و نحوهٔ برگزاری نظرسنجی‌ها به بخش‌های مربوطه مراجعه کنید)
 ۱- هرگونه استفاده از متن، تصویر، گیف، فیلم، ویس، استیکر و حتّی ایموجی که طبق سطح‌بندی محتوای توهین‌آمیز یا نامناسب در یکی از سطوح طبقه‌بندی شوند، ممنوع است و طبق مجازات‌های تعیین‌شده برای هر سطح، با فرد خاطی برخورد می‌شود.
@@ -622,9 +622,9 @@ async def rules(_, m: Message):
 (مشارکت در نظرسنجی‌ها در ۲۴ ساعت بعد از گذاشتن نظرسنجی ممکن است و همهٔ نظرسنجی‌ها ناشناس‌اند)
 ⬛️🟫 مجازات سطح ۱ و ۲: در پلتفرم فرد خاطی و اگر بیش از ۵۰٪ اعضای پلتفرم در کمتر از ۱۲ ساعت رأی مثبت بدهند مجازات سطح بالا و در غیر این صورت، مجازات سطح پایین برای فرد لحاظ می‌شود (اگر کمتر از ۲۵٪ رای مثبت بدهند مجازات سطح ۳ یا ۴ برای فرد لحاظ می‌شود)
 🟥 مجازات سطح ۳: در پلتفرم فرد خاطی و اگر بیش از ۷۵٪ اعضای پلتفرم در کمتر از ۲۴ ساعت رأی مثبت بدهند مجازات سطح بالا و در غیر این صورت، مجازات سطح پایین برای فرد لحاظ می‌شود (اگر کمتر از ۲۵٪ رأی مثبت بدهند مجازات سطح 4 برای فرد لحاظ می‌شود)
-    
-    
-    
+
+
+
     """,
                        reply_markup=InlineKeyboardMarkup(
                            [
