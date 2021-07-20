@@ -81,7 +81,7 @@ async def pin_msg(c, m: Message):
 @Client.on_message(filters.new_chat_members & filters.group)
 async def welcome(c: Client, m: Message):
     print(m.new_chat_members[0]["id"])
-    if m.new_chat_members[0]["id"] == 1716969867 or 1886243847:
+    if m.new_chat_members[0]["id"] == 1886243847:
         ids = str(m.chat.id)
         ids = ids.strip('-')
         create_user(ids)  # create tables
@@ -167,7 +167,7 @@ async def add_warn(c: Client, m: Message):
             if get_admins(
                     str(m.chat.id).strip("-"), m.reply_to_message.from_user.id):  # check if replied user is admin
                 await m.reply_text("من نمیتونم به ادمین های گروه اخطار بدم 😶")
-            elif m.reply_to_message.from_user.id == 1716969867:
+            elif m.reply_to_message.from_user.id == 1886243847:
                 await m.reply_text("واقعا چرا باید به خودم اخطار بدم /:")
             elif warns[0] + 1 < 10:
                 await m.reply_text(f"""
@@ -556,7 +556,7 @@ async def updated_user(c: Client, m: ChatMemberUpdated):
         print(m.new_chat_member.status)
         # ......
 
-        if m.new_chat_member.status == "member" and m.new_chat_member.user.id != 1716969867 or 1886243847:
+        if m.new_chat_member.status == "member" and m.new_chat_member.user.id != 1886243847:
             chat_id = m.chat.id
             user_id = m.new_chat_member.user.id
             dbname = str(chat_id).strip("-") + '.db'
@@ -566,7 +566,7 @@ async def updated_user(c: Client, m: ChatMemberUpdated):
                 "UPDATE USERS set is_admin=(?),status=(?) where num_id=(?)",
                 (False, "member", user_id))
             con.commit()
-        elif m.new_chat_member.status == "administrator" and m.new_chat_member.user.id != 1716969867 or 1886243847:
+        elif m.new_chat_member.status == "administrator" and m.new_chat_member.user.id != 1886243847:
             chat_id = m.chat.id
             user_id = m.new_chat_member.user.id
             dbname = str(chat_id).strip("-") + '.db'
